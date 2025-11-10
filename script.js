@@ -18,9 +18,41 @@ const progressFill = document.getElementById('progressFill');
 let currentStage = 0;
 let collectedMemories = 0;
 let stageMemories = [];
-let ermiyasPos = { x: 100, y: 200 };
-let rakebPos = { x: 200, y: 200 };
+let ermiyasPos = { x: 50, y: 150 };
+let rakebPos = { x: 100, y: 150 };
 let gameActive = false;
+
+// Responsive positions based on screen size
+function getResponsivePositions() {
+    const isMobile = window.innerWidth < 768;
+    const gameAreaRect = gameArea.getBoundingClientRect();
+    
+    if (isMobile) {
+        return {
+            ermiyas: { x: 50, y: 150 },
+            rakeb: { x: 100, y: 150 },
+            memories: [
+                { x: Math.min(200, gameAreaRect.width - 100), y: 80 },
+                { x: Math.min(300, gameAreaRect.width - 100), y: 150 },
+                { x: Math.min(250, gameAreaRect.width - 100), y: 200 },
+                { x: Math.min(350, gameAreaRect.width - 100), y: 80 },
+                { x: Math.min(400, gameAreaRect.width - 100), y: 180 }
+            ]
+        };
+    } else {
+        return {
+            ermiyas: { x: 100, y: 200 },
+            rakeb: { x: 200, y: 200 },
+            memories: [
+                { x: 300, y: 120 },
+                { x: 450, y: 200 },
+                { x: 350, y: 280 },
+                { x: 500, y: 120 },
+                { x: 600, y: 220 }
+            ]
+        };
+    }
+}
 
 // Stage Data
 const stages = [
@@ -32,13 +64,13 @@ const stages = [
         ermiyasEmoji: "👦",
         rakebEmoji: "👧",
         memories: [
-            { emoji: "📝", x: 300, y: 120, message: "First homework together!" },
-            { emoji: "🍎", x: 450, y: 200, message: "Sharing lunch!" },
-            { emoji: "🎨", x: 350, y: 280, message: "Drawing pictures!" },
-            { emoji: "📚", x: 500, y: 120, message: "Studying together!" },
-            { emoji: "🚌", x: 600, y: 220, message: "School bus rides!" }
+            { emoji: "📝", message: "First homework together!" },
+            { emoji: "🍎", message: "Sharing lunch!" },
+            { emoji: "🎨", message: "Drawing pictures!" },
+            { emoji: "📚", message: "Studying together!" },
+            { emoji: "🚌", message: "School bus rides!" }
         ],
-        story: "Where it all began - young love in the classroom!"
+        story: "Where it all began - young love in classroom!"
     },
     {
         name: "College Years",
@@ -48,11 +80,11 @@ const stages = [
         ermiyasEmoji: "👨‍🎓",
         rakebEmoji: "👩‍🎓",
         memories: [
-            { emoji: "☕", x: 350, y: 150, message: "Coffee dates!" },
-            { emoji: "📚", x: 500, y: 120, message: "Library sessions!" },
-            { emoji: "🎉", x: 400, y: 250, message: "Campus parties!" },
-            { emoji: "🍕", x: 550, y: 200, message: "Late night pizza!" },
-            { emoji: "🎓", x: 300, y: 280, message: "Graduation day!" }
+            { emoji: "☕", message: "Coffee dates!" },
+            { emoji: "📚", message: "Library sessions!" },
+            { emoji: "🎉", message: "Campus parties!" },
+            { emoji: "🍕", message: "Late night pizza!" },
+            { emoji: "🎓", message: "Graduation day!" }
         ],
         story: "Growing together, learning about life and love!"
     },
@@ -64,11 +96,11 @@ const stages = [
         ermiyasEmoji: "👨‍💼",
         rakebEmoji: "👩‍💼",
         memories: [
-            { emoji: "💻", x: 320, y: 150, message: "First jobs!" },
-            { emoji: "🏠", x: 480, y: 200, message: "Moving in together!" },
-            { emoji: "💰", x: 380, y: 280, message: "Saving for dreams!" },
-            { emoji: "🚗", x: 530, y: 150, message: "Road trips!" },
-            { emoji: "💍", x: 600, y: 220, message: "The proposal!" }
+            { emoji: "💻", message: "First jobs!" },
+            { emoji: "🏠", message: "Moving in together!" },
+            { emoji: "💰", message: "Saving for dreams!" },
+            { emoji: "🚗", message: "Road trips!" },
+            { emoji: "💍", message: "The proposal!" }
         ],
         story: "Building careers and a future together!"
     },
@@ -80,11 +112,11 @@ const stages = [
         ermiyasEmoji: "🤵",
         rakebEmoji: "👰",
         memories: [
-            { emoji: "💒", x: 400, y: 120, message: "Wedding day!" },
-            { emoji: "🌴", x: 320, y: 250, message: "Honeymoon!" },
-            { emoji: "🏡", x: 480, y: 200, message: "First home!" },
-            { emoji: "🍳", x: 530, y: 280, message: "Cooking together!" },
-            { emoji: "🌹", x: 250, y: 180, message: "Anniversary dates!" }
+            { emoji: "💒", message: "Wedding day!" },
+            { emoji: "🌴", message: "Honeymoon!" },
+            { emoji: "🏡", message: "First home!" },
+            { emoji: "🍳", message: "Cooking together!" },
+            { emoji: "🌹", message: "Anniversary dates!" }
         ],
         story: "The beginning of forever!"
     },
@@ -96,11 +128,11 @@ const stages = [
         ermiyasEmoji: "👴",
         rakebEmoji: "👵",
         memories: [
-            { emoji: "👨‍👩‍👧‍👦", x: 380, y: 150, message: "Grandchildren!" },
-            { emoji: "🌺", x: 450, y: 250, message: "Garden together!" },
-            { emoji: "☕", x: 320, y: 280, message: "Morning coffee!" },
-            { emoji: "📷", x: 500, y: 120, message: "Looking at photos!" },
-            { emoji: "💕", x: 250, y: 200, message: "Still in love!" }
+            { emoji: "👨‍👩‍👧‍👦", message: "Grandchildren!" },
+            { emoji: "🌺", message: "Garden together!" },
+            { emoji: "☕", message: "Morning coffee!" },
+            { emoji: "📷", message: "Looking at photos!" },
+            { emoji: "💕", message: "Still in love!" }
         ],
         story: "Growing old together, love never fades!"
     }
@@ -109,8 +141,8 @@ const stages = [
 // Initialize Stage
 function initStage() {
     const stage = stages[currentStage];
+    const positions = getResponsivePositions();
     
-    // Update visuals
     gameContainer.className = `game-container ${stage.background}`;
     stageIcon.textContent = stage.icon;
     stageName.textContent = stage.name;
@@ -118,38 +150,36 @@ function initStage() {
     ermiyas.textContent = stage.ermiyasEmoji;
     rakeb.textContent = stage.rakebEmoji;
     
-    // Reset positions
-    ermiyasPos = { x: 100, y: 200 };
-    rakebPos = { x: 200, y: 200 };
+    ermiyasPos = positions.ermiyas;
+    rakebPos = positions.rakeb;
     updatePlayerPositions();
     
-    // Clear existing items
     clearStage();
     
-    // Create memories
     stageMemories = [];
     stage.memories.forEach((memory, index) => {
         const memoryElement = document.createElement('div');
         memoryElement.className = 'memory-item';
         memoryElement.innerHTML = memory.emoji;
-        memoryElement.style.left = memory.x + 'px';
-        memoryElement.style.top = memory.y + 'px';
+        const pos = positions.memories[index];
+        memoryElement.style.left = pos.x + 'px';
+        memoryElement.style.top = pos.y + 'px';
         memoryElement.dataset.index = index;
         gameArea.appendChild(memoryElement);
         stageMemories.push({
             element: memoryElement,
             collected: false,
+            x: pos.x,
+            y: pos.y,
             ...memory
         });
     });
     
-    // Update UI
     collectedMemories = 0;
     memoryCount.textContent = collectedMemories;
     totalMemories.textContent = stage.memories.length;
     updateProgress();
     
-    // Show message
     messageTitle.textContent = "Welcome to " + stage.name + "!";
     messageText.textContent = stage.story;
     startBtn.textContent = "Start Chapter";
@@ -189,22 +219,18 @@ function collectMemory(memory) {
     memoryCount.textContent = collectedMemories;
     updateProgress();
     
-    // Create heart particles
     for (let i = 0; i < 5; i++) {
         setTimeout(() => {
-            createHeartParticle(memory.x + 22, memory.y + 22);
+            createHeartParticle(memory.x + 17, memory.y + 17);
         }, i * 100);
     }
     
-    // Show floating text
     showFloatingText(memory.x, memory.y, memory.message);
     
-    // Remove memory element
     setTimeout(() => {
         memory.element.remove();
     }, 600);
     
-    // Check if stage complete
     if (collectedMemories === stages[currentStage].memories.length) {
         setTimeout(() => {
             completeStage();
@@ -263,7 +289,6 @@ function completeStage() {
         startBtn.onclick = restartGame;
         messageOverlay.style.display = 'flex';
         
-        // Celebration
         for (let i = 0; i < 20; i++) {
             setTimeout(() => {
                 createHeartParticle(
@@ -291,11 +316,11 @@ function restartGame() {
 function movePlayer(player, direction) {
     if (!gameActive) return;
     
-    const speed = 20;
+    const speed = window.innerWidth < 768 ? 15 : 20;
     const gameAreaRect = gameArea.getBoundingClientRect();
-    const playerSize = 50;
-    const headerHeight = 80;
-    const progressBarHeight = 50;
+    const playerSize = window.innerWidth < 768 ? 40 : 50;
+    const headerHeight = 60;
+    const progressBarHeight = 40;
     
     const pos = player === 'ermiyas' ? ermiyasPos : rakebPos;
     
@@ -331,7 +356,7 @@ function checkMemoryCollection() {
                 Math.pow(rakebPos.y - memory.y, 2)
             );
             
-            if (distE < 40 || distR < 40) {
+            if (distE < 35 || distR < 35) {
                 collectMemory(memory);
             }
         }
@@ -392,12 +417,14 @@ ermiyas.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchedPlayer = 'ermiyas';
+    e.preventDefault();
 });
 
 rakeb.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchedPlayer = 'rakeb';
+    e.preventDefault();
 });
 
 document.addEventListener('touchmove', (e) => {
@@ -408,30 +435,48 @@ document.addEventListener('touchmove', (e) => {
     
     const dx = touchEndX - touchStartX;
     const dy = touchEndY - touchStartY;
+    const threshold = window.innerWidth < 768 ? 20 : 30;
     
     if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 30) {
+        if (dx > threshold) {
             movePlayer(touchedPlayer, 'right');
             touchStartX = touchEndX;
-        } else if (dx < -30) {
+        } else if (dx < -threshold) {
             movePlayer(touchedPlayer, 'left');
             touchStartX = touchEndX;
         }
     } else {
-        if (dy > 30) {
+        if (dy > threshold) {
             movePlayer(touchedPlayer, 'down');
             touchStartY = touchEndY;
-        } else if (dy < -30) {
+        } else if (dy < -threshold) {
             movePlayer(touchedPlayer, 'up');
             touchStartY = touchEndY;
         }
     }
+    e.preventDefault();
 });
 
 document.addEventListener('touchend', () => {
     touchStartX = null;
     touchStartY = null;
     touchedPlayer = null;
+});
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    if (gameActive && stageMemories.length > 0) {
+        const positions = getResponsivePositions();
+        stageMemories.forEach((memory, index) => {
+            const pos = positions.memories[index];
+            memory.x = pos.x;
+            memory.y = pos.y;
+            if (memory.element) {
+                memory.element.style.left = pos.x + 'px';
+                memory.element.style.top = pos.y + 'px';
+            }
+        });
+    }
 });
 
 // Initialize Game
