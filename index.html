@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Love Story - Ermiyas & Rakeb's Journey</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Game Wrapper -->
+    <div class="game-wrapper">
+        <!-- Game Container -->
+        <div class="game-container stage-school" id="gameContainer">
+            <!-- Header with stage info -->
+            <div class="game-header">
+                <div class="stage-title">
+                    <span class="stage-icon" id="stageIcon">🎒</span>
+                    <span id="stageName">School Days</span>
+                </div>
+                <div class="memories">
+                    Memories: <span id="memoryCount">0</span>/<span id="totalMemories">5</span>
+                </div>
+            </div>
+            
+            <!-- Main Game Area -->
+            <div class="game-area" id="gameArea">
+                <!-- Players -->
+                <div id="ermiyas" class="player">👦</div>
+                <div id="rakeb" class="player">👧</div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                
+                <!-- Stage Decoration -->
+                <div class="stage-decoration" id="stageDecoration">📚</div>
+            </div>
+            
+            <!-- Message Overlay -->
+            <div class="message-overlay" id="messageOverlay">
+                <div class="message-box">
+                    <h2 id="messageTitle">Welcome to School Days!</h2>
+                    <p id="messageText">Help Ermiyas and Rakeb collect their first memories together!</p>
+                    <button class="btn" id="startBtn">Start Chapter</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Desktop Controls -->
+        <div class="controls">
+            <p>Guide Ermiyas and Rakeb through their life journey, collecting memories at each stage!</p>
+            <div class="key-info">
+                <div class="player-controls">
+                    <span>👨 Ermiyas:</span>
+                    <span class="key">W</span>
+                    <span class="key">A</span>
+                    <span class="key">S</span>
+                    <span class="key">D</span>
+                </div>
+                <div class="player-controls">
+                    <span>👩 Rakeb:</span>
+                    <span class="key">↑</span>
+                    <span class="key">←</span>
+                    <span class="key">↓</span>
+                    <span class="key">→</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Controls -->
+    <div class="mobile-controls">
+        <div class="control-pad">
+            <h3>👨 Ermiyas</h3>
+            <div class="d-pad" id="ermiyasPad">
+                <button data-direction="up">↑</button>
+                <button data-direction="left">←</button>
+                <button data-direction="right">→</button>
+                <button data-direction="down">↓</button>
+            </div>
+        </div>
+        <div class="control-pad">
+            <h3>👩 Rakeb</h3>
+            <div class="d-pad rakeb" id="rakebPad">
+                <button data-direction="up">↑</button>
+                <button data-direction="left">←</button>
+                <button data-direction="right">→</button>
+                <button data-direction="down">↓</button>
+            </div>
+        </div>
+    </div>
+<script src="script.js"></script>
+</body>
+</html>
